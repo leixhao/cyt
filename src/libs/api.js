@@ -1,22 +1,72 @@
 import $http from './http'
 
 /**
- * 作业平台 ADT短链
+ * 获取科室列表
  */
 export const allDepartment = (data) => $http({
     url: '/qualification/find/all/department',
     method: 'get',
     params: data
 })
-// ADT短链 发布列表
-export const slStandardReleasePage = (data) => $http({
-    url: '/slStandard/releasePage',
+/**
+ * 用量单位
+ */
+export const allDosage = (data) => $http({
+    url: '/qualification/find/all/dosage/unit',
     method: 'get',
     params: data
 })
-// 短链的详情编辑
-export const slStandardCompletion = (data) => $http({
-    url: 'slStandard/completion',
+// 药品列表
+export const allDrug = (data) => $http({
+    url: '/qualification/find/all/drug',
+    method: 'post',
+    data: data
+})
+// 民族列表
+export const allNation = (data) => $http({
+    url: '/qualification/find/all/nation',
+    method: 'post',
+    data: data
+})
+// 行政区编码
+export const areaCoding = (data) => $http({
+    url: '/qualification/find/area/codinnng',
+    method: 'post',
+    data: data
+})
+// 医嘱类型编码
+export const doctorAdvice = (data) => $http({
+    url: '/qualification/find/doctor/advice',
+    method: 'post',
+    data: data
+})
+// 给药途径
+export const deliveryRoute = (data) => $http({
+    url: '/qualification/find/drug/delivery/route',
+    method: 'post',
+    data: data
+})
+// 就诊原因
+export const reasonVisit = (data) => $http({
+    url: '/qualification/find/reason/visit',
+    method: 'post',
+    data: data
+})
+// 侯症编码
+export const syndromeCoding = (data) => $http({
+    url: '/qualification/find/syndrome/coding',
+    method: 'post',
+    data: data
+})
+// 诊断编码
+export const diseaseDiagnosis = (data) => $http({
+    url: '/qualification/find/tcm/disease/diagnosis',
+    method: 'post',
+    data: data
+})
+// 用药频度
+export const tcmRequency = (data) => $http({
+    url: '/qualification/find/tcm/requency',
     method: 'post',
     data: data
 })

@@ -1,51 +1,49 @@
 <template>
-  <div id="app">
-    <Test />
-    <!-- <div style="width: 100px; background-color: green">
-      123<i class="el-icon-download"></i>
-    </div>
-    <el-button @click="getData({}, msg.factoryInfo, [])">获取</el-button>
+  <div>
+    <!-- <el-button @click="getData({}, msg.factoryInfo, [])">获取</el-button> -->
     <el-checkbox-group
       v-model="checkedCities"
       @change="handleCheckedCitiesChange"
     >
-      <el-checkbox v-for="city in cities" :label="city" :key="city">
-        <div style="width: 100px; background-color: green">
-          123<i class="el-icon-download"></i>
+      <el-checkbox v-for="item in endArr" :label="item" :key="item">
+        <div
+          @contextmenu.prevent="
+            (e) => {
+              rightClick(e, item);
+            }
+          "
+        >
+          <All
+            name="app"
+            :prop="item"
+            style="
+              float: left;
+              margin-left: 6px;
+              margin-top: 6px;
+              flex-direction: row;
+              // 自动换行
+              flex-wrap: wrap;
+            "
+          >
+          </All>
         </div>
       </el-checkbox>
-    </el-checkbox-group> -->
-    <!-- <HelloWorld msg="Welcome to Your Vue.js App" /> -->
-    <!-- <Tabc :tabs="tabs" /> -->
-    <!-- <EditTabs /> -->
-    <!-- <Tablec /> -->
+    </el-checkbox-group>
   </div>
 </template>
+
 <script>
-import HelloWorld from "./components/HelloWorld.vue";
-import Tabc from "./components/Tabc.vue";
-import EditTabs from "./components/EditTabs.vue";
-import Tablec from "./components/Tablec.vue";
-import Test from "./components/Test.vue";
-const cityOptions = ["上海", "北京", "广州", "深圳"];
+import All from "./one.vue";
 export default {
-  name: "App",
+  name: "Test",
   components: {
-    HelloWorld,
-    Tabc,
-    EditTabs,
-    Tablec,
-    Test
+    All,
+  },
+  mounted() {
+    this.getData({}, this.msg.factoryInfo, []);
   },
   data() {
     return {
-      left: 1,
-      tabPosition: "left",
-      tabs: ["用户管理萨达", "用户管理", "用户管理", "这是最长的了看这个"],
-      checkAll: false,
-      checkedCities: ["上海", "北京"],
-      cities: cityOptions,
-      isIndeterminate: true,
       visionList: [{ Version: "0.0.0.0" }],
       msg: {
         messageKey: "1637559580454",
@@ -745,106 +743,121 @@ export default {
           },
         ],
       },
+      endArr: [],
+      checkedCities: [],
     };
   },
   methods: {
     getChild(obj, arr, newArr) {
-      console.log(obj.equipmentName)
-      console.log(arr)
-      console.log(newArr)
-      let neObj = JSON.parse(JSON.stringify(obj));
+      console.log(obj.equipmentName);
+      console.log(arr);
+      console.log(newArr);
+      let newObj = JSON.parse(JSON.stringify(obj));
       arr.forEach((element) => {
         // console.log(element);
         if (element.factoryID) {
-          obj.FACTOYR_ID = element.factoryID;
-          console.log(obj)
-          this.getChild(neObj, element.lineInfo, newArr);
+          newObj.FACTOYR_ID = element.factoryID;
+          console.log(obj);
+          this.getChild(newObj, element.lineInfo, newArr);
         } else if (element.lineID) {
-          console.log(obj)
-          obj.LINE_ID = element.lineID;
-          this.getChild(neObj, element.returnSiteInfo, newArr);
+          console.log(obj);
+          newObj.LINE_ID = element.lineID;
+          this.getChild(newObj, element.returnSiteInfo, newArr);
         } else if (element.siteCode) {
-          console.log(obj)
-          this.getChild(neObj, element.returnEquipmentInfo, newArr);
+          console.log(obj);
+          newObj.SessionId = element.siteCode;
+          this.getChild(newObj, element.returnEquipmentInfo, newArr);
         } else {
-          (neObj.title = element.equipmentID),
-            (neObj.wbL = element.returnParamterInfo[2].currentValue),
-            (neObj.wbR = element.returnParamterInfo[3].currentValue),
-            (neObj.div1 = element.returnParamterInfo[0].description),
-            (neObj.div2 = element.returnParamterInfo[1].description),
-            (neObj.div3 = element.returnParamterInfo[4].currentValue),
-            (neObj.div4 = element.returnParamterInfo[5].currentValue),
-            (neObj.CL = "background:#1d9745"),
-            (neObj.CR = "background:#88d478"),
-            (neObj.Bdiv1 =
+          (newObj.title = element.equipmentID),
+            (newObj.wbL = element.returnParamterInfo[2].currentValue),
+            (newObj.wbR = element.returnParamterInfo[3].currentValue),
+            (newObj.div1 = element.returnParamterInfo[0].description),
+            (newObj.div2 = element.returnParamterInfo[1].description),
+            (newObj.div3 = element.returnParamterInfo[4].currentValue),
+            (newObj.div4 = element.returnParamterInfo[5].currentValue),
+            (newObj.CL = "background:#1d9745"),
+            (newObj.CR = "background:#88d478"),
+            (newObj.Bdiv1 =
               element.returnParamterInfo[0].currentValue === "0"
                 ? "background:#B33737"
                 : "background:#9ED583"),
-            (neObj.Bdiv2 =
+            (newObj.Bdiv2 =
               element.returnParamterInfo[1].currentValue === "0"
                 ? "background:#B33737"
                 : "background:#9ED583"),
-            (neObj.Bdiv3 = "background:#67C23A"),
-            (neObj.Bdiv4 =
+            (newObj.Bdiv3 = "background:#67C23A"),
+            (newObj.Bdiv4 =
               this.visionList[0].Version >
               element.returnParamterInfo[5].currentValue
                 ? "background:#F4AE46"
                 : "background:#67C23A"),
-            (neObj.Sdiv4 =
+            (newObj.Sdiv4 =
               this.visionList[0].Version >
               element.returnParamterInfo[5].currentValue
                 ? true
                 : false);
-          neObj.EQP_ID = element.equipmentID;
-          neObj.equipmentName = element.equipmentName;
-          newArr.push(neObj);
-          return newArr
+          newObj.EQP_ID = element.equipmentID;
+          newObj.equipmentName = element.equipmentName;
+          newArr.push(newObj);
+          return newArr;
         }
       });
-      return newArr
+      return newArr;
     },
     getData(obj, arr, newArr) {
-      let arrA = this.getChild(obj, arr, newArr)
-      console.log(arrA)
+      let arrA = this.getChild(obj, arr, newArr);
+      //最后取出来的数据
+      this.endArr = arrA;
+      console.log(arrA);
     },
-    handleCheckAllChange(val) {
-      this.checkedCities = val ? cityOptions : [];
-      this.isIndeterminate = false;
+    handleCheckedCitiesChange(val) {
+      console.log(val);
+      let arr = this.endArr.filter(item => item.LINE_ID == "LFP01")
+      console.log(arr)
+      if(val.length){
+        let arr = val.map(item =>{
+          let obj = {
+            SessionId: item.SessionId,
+            FACTOYR_ID: item.FACTOYR_ID,
+            LINE_ID: item.LINE_ID,
+            EQP_ID: item.EQP_ID,
+          };
+          return obj
+        })
+        console.log(arr)
+      }
     },
-    handleCheckedCitiesChange(value) {
-      let checkedCount = value.length;
-      this.checkAll = checkedCount === this.cities.length;
-      this.isIndeterminate =
-        checkedCount > 0 && checkedCount < this.cities.length;
+    //选中的设备的右键菜单栏的事件
+    rightClick(e, item) {
+      if (item.id == "1") {
+        this.flag = true;
+      } else {
+        this.flag = false;
+      }
+      console.log(item);
+      // 屏幕可见宽
+      let clientWidth = document.body.clientWidth;
+      // 菜单宽
+      let menuWidth = 140;
+      // 点击右键时会返回对应的clientX，用这个值与(clientWidth+菜单宽度)对比，如果大于的话，就把菜单左偏移一个菜单宽
+      let clickClientX = e.clientX + menuWidth;
+      if (clickClientX > clientWidth) {
+        console.log("菜单超出视线范围");
+        this.x_index = e.layerX;
+      } else {
+        this.x_index = e.layerX + menuWidth * 2.5;
+      }
+      this.y_index = e.layerY + 50;
+      this.ctrlId = item.id;
+      this.showMenu = true;
+
+      this.paramlist = [];
+
+      this.paramlist.push(item);
     },
   },
 };
 </script>
 
 <style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
-}
-html,
-body {
-  margin: 0;
-  padding: 0;
-  /* background: #c5b084; */
-  font-size: 14px;
-}
-.el-tabs--left .el-tabs__item.is-left {
-  width: 125px;
-  white-space: normal;
-  word-break: break-word;
-}
-.el-tabs--left .el-tabs__item.is-left {
-  width: 100px;
-  white-space: normal;
-  word-break: break-word;
-}
 </style>
