@@ -70,6 +70,12 @@ export const tcmRequency = (data) => $http({
     method: 'post',
     data: data
 })
+// 数据上传
+export const upload = (data) => $http({
+    url: '/diagnosis/record/diagnosis/upload',
+    method: 'post',
+    data: data
+})
 // ADT 发布审核接口
 export const slStandardDataRelease = (data) => $http({
     url: 'slStandard/dataRelease',

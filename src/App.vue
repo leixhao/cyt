@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <Test />
+    <!-- <Test /> -->
     <!-- <div style="width: 100px; background-color: green">
       123<i class="el-icon-download"></i>
     </div>
@@ -15,10 +15,12 @@
         </div>
       </el-checkbox>
     </el-checkbox-group> -->
-    <!-- <HelloWorld msg="Welcome to Your Vue.js App" /> -->
+    <HelloWorld msg="Welcome to Your Vue.js App" />
     <!-- <Tabc :tabs="tabs" /> -->
     <!-- <EditTabs /> -->
     <!-- <Tablec /> -->
+    <!-- <Other /> -->
+    <!-- <Others /> -->
   </div>
 </template>
 <script>
@@ -27,6 +29,8 @@ import Tabc from "./components/Tabc.vue";
 import EditTabs from "./components/EditTabs.vue";
 import Tablec from "./components/Tablec.vue";
 import Test from "./components/Test.vue";
+import Other from "./components/1.vue";
+import Others from "./components/2.vue";
 const cityOptions = ["上海", "北京", "广州", "深圳"];
 export default {
   name: "App",
@@ -35,7 +39,9 @@ export default {
     Tabc,
     EditTabs,
     Tablec,
-    Test
+    Test,
+    Other,
+    Others
   },
   data() {
     return {

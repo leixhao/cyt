@@ -368,7 +368,7 @@
             v-model="departmentName"
             size="mini"
             :options="departmentArr"
-            :props="{ label: 'department', value: 'coding' }"
+            :props="{ label: 'department', value: 'departCodeName' }"
             @change="handleChange"
           ></el-cascader>
         </div>
@@ -816,7 +816,15 @@
               <div class="dome4">规格</div>
               <div class="dome5">
                 <!-- <input type="text" class="E" name="E05" /> -->
-                <el-input v-model="item.E04"></el-input>
+                <el-select v-model="item.E05" clearable placeholder="请选择">
+                  <el-option
+                    v-for="item in ylArr"
+                    :key="item.name"
+                    :label="item.name"
+                    :value="item.coding"
+                  >
+                  </el-option>
+                </el-select>
               </div>
             </div>
             <div class="dome3">
@@ -912,8 +920,22 @@
         </div>
       </template>
     </div>
-
-    <div class="dome1" id="feiyong">
+    <div class="dome1">
+      <div class="dome3">
+        <div class="dome4">缴费时间</div>
+        <div class="dome5">
+          <!-- <input type="text" class="E" name="E04" /> -->
+          <!-- <el-input v-model="item.E04"></el-input> -->
+          <el-date-picker
+            v-model="payTime"
+            type="datetime"
+            placeholder="选择缴费时间"
+          >
+          </el-date-picker>
+        </div>
+      </div>
+    </div>
+    <!-- <div class="dome1" id="feiyong">
       <div class="dome2">
         费用明细 <a class="add" id="add_feiyong">+添加</a>
       </div>
@@ -959,7 +981,7 @@
           </div>
         </div>
       </template>
-    </div>
+    </div> -->
 
     <div class="dome-tj" id="sure" @click="putData">确定</div>
   </div>
@@ -1037,6 +1059,7 @@ export default {
         bingmingArr: [{}],
         feiyongArr: [{}],
       },
+      payTime: '',
       departmentName: [],
       departmentArr: [],
       ylArr: [],
@@ -1352,7 +1375,7 @@ export default {
     selectDrug(e, index) {
       this.subData.yizhuArr[index].E03C = e.split("~")[0];
       this.subData.yizhuArr[index].E03N = e.split("~")[1];
-      console.log(this.subData.yizhuArr);
+      // console.log(this.subData.yizhuArr);
     },
     selectReason(e, index) {
       // console.log(e, index);
@@ -1445,6 +1468,18 @@ export default {
     putData() {
       // console.log(this);
       console.log(this.subData);
+      console.log(
+        this.subData.yizhuArr.map((item) => {
+          return {
+            F01C: item.E03C,
+            F01N: item.E03N,
+            F02C: this.subData.C09N,
+            F03: this.payTime,
+            F04: item.E08,
+            F05: item.E07,
+          };
+        })
+      );
       let str = "";
       for (const key in this.subData) {
         if (Object.hasOwnProperty.call(this.subData, key)) {
@@ -1456,10 +1491,10 @@ export default {
           } else if (key == "houzhenArr") {
             str = this.getStr(str, element, "HS", "H", "houzhen");
           } else if (key == "yizhuArr") {
-            str = this.getStr(str, element, "ES", "E", "houzhen");
+            str = this.getStr(str, element, "ES", "E", "reason");
           } else if (key == "feiyongArr") {
             str = this.getStr(str, element, "FS", "F", "houzhen");
-          }else{
+          } else {
             str += "<" + key + ">" + element + "</" + key + ">";
           }
         }
@@ -1482,7 +1517,8 @@ export default {
       return (str += "</" + one + ">");
     },
     handleChange(value) {
-      console.log(value);
+      this.subData.C09C = value[value.length - 1].split("#")[0].trim();
+      this.subData.C09N = value[value.length - 1].split("#")[1].trim();
     },
     changeChildren(arr) {
       arr.forEach((element) => {
